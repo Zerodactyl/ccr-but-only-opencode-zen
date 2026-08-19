@@ -10,12 +10,12 @@ test("built CLI exposes package-owned help", () => {
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /Usage:/);
-  assert.match(result.stdout, /ccr serve/);
-  assert.match(result.stdout, /ccr <profile-name-or-id>/);
+  assert.match(result.stdout, /ccr-opz setup/);
+  assert.match(result.stdout, /ccr-opz <profile-name-or-id>/);
 });
 
 test("built CLI rejects invalid ports before starting services", () => {
-  const result = runCli(["serve", "--port", "invalid", "--no-open", "--no-gateway"]);
+  const result = runCli(["start", "--port", "invalid"]);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /Invalid port: invalid/);
@@ -23,10 +23,8 @@ test("built CLI rejects invalid ports before starting services", () => {
 
 test("every service command exposes its package-owned command help", () => {
   for (const [command, usage] of [
-    ["start", /ccr start/],
-    ["ui", /ccr ui/],
-    ["serve", /ccr serve/],
-    ["stop", /ccr stop/]
+    ["start", /ccr-opz start/],
+    ["setup", /ccr-opz setup/]
   ]) {
     const result = runCli([command, "--help"]);
     assert.equal(result.status, 0, `${command}: ${result.stderr}`);
@@ -36,12 +34,9 @@ test("every service command exposes its package-owned command help", () => {
 
 test("built CLI rejects missing, out-of-range, and unknown service options", () => {
   const cases = [
-    [["serve", "--host"], /--host requires a value/],
-    [["serve", "--host="], /--host requires a value/],
-    [["serve", "--port", "0"], /Invalid port: 0/],
-    [["serve", "--port=65536"], /Invalid port: 65536/],
-    [["ui", "--unknown"], /Unknown web option: --unknown/],
-    [["stop", "--force"], /Unknown stop option: --force/]
+    [["start", "--port", "0"], /Invalid port: 0/],
+    [["start", "--port=65536"], /Invalid port: 65536/],
+    [["start", "--unknown"], /Unknown start option: --unknown/]
   ];
 
   for (const [args, error] of cases) {
@@ -55,7 +50,7 @@ test("built CLI requires a profile reference when no command is supplied", () =>
   const result = runCli([]);
 
   assert.equal(result.status, 2, result.stderr);
-  assert.match(`${result.stdout}${result.stderr}`, /ccr <profile-name-or-id>/);
+  assert.match(`${result.stdout}${result.stderr}`, /ccr-opz <profile-name-or-id>/);
 });
 
 function runCli(args) {
@@ -63,7 +58,7 @@ function runCli(args) {
     encoding: "utf8",
     env: {
       ...process.env,
-      CCR_CLI_COMMAND_NAME: "ccr"
+      CCR_CLI_COMMAND_NAME: "ccr-opz"
     }
   });
 }

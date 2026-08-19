@@ -9,9 +9,7 @@ const ccrExtensionsRoot = path.resolve(process.env.CCR_EXTENSIONS_DIR || path.jo
 const testsOutDir = path.join(projectRoot, ".test-dist");
 const packageRoots = {
   cli: path.join(projectRoot, "packages", "cli", "src"),
-  core: path.join(projectRoot, "packages", "core", "src"),
-  electron: path.join(projectRoot, "packages", "electron", "src"),
-  ui: path.join(projectRoot, "packages", "ui", "src")
+  core: path.join(projectRoot, "packages", "core", "src")
 };
 const testProjects = {
   architecture: {
@@ -46,9 +44,6 @@ const testProjects = {
   },
   electron: {
     testDir: path.join(projectRoot, "packages", "electron", "test")
-  },
-  ui: {
-    testDir: path.join(projectRoot, "packages", "ui", "test")
   }
 };
 
@@ -92,8 +87,7 @@ for (const [name, project] of selectedProjects) {
     bundle: true,
     entryPoints,
     external: [
-      "better-sqlite3",
-      "electron"
+      "better-sqlite3"
     ],
     format: "cjs",
     jsx: "automatic",
@@ -160,7 +154,7 @@ function rendererAliasPlugin() {
     name: "renderer-test-alias",
     setup(build) {
       build.onResolve({ filter: /^@\// }, (args) => {
-        return { path: resolvePackageImport(packageRoots.ui, args.path.slice(2)) };
+        return { path: resolvePackageImport(packageRoots.core, args.path.slice(2)) };
       });
     }
   };
@@ -170,8 +164,8 @@ function packageAliasPlugin() {
   return {
     name: "test-package-alias",
     setup(build) {
-      build.onResolve({ filter: /^@ccr\/(cli|core|electron|ui)\// }, (args) => {
-        const match = args.path.match(/^@ccr\/(cli|core|electron|ui)\/(.+)$/);
+      build.onResolve({ filter: /^@ccr\/(cli|core)\// }, (args) => {
+        const match = args.path.match(/^@ccr\/(cli|core)\/(.+)$/);
         if (!match) {
           return undefined;
         }

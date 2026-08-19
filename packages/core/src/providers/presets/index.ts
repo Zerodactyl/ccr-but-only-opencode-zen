@@ -12,6 +12,8 @@ import { mistralProviderPreset } from "@ccr/core/providers/presets/mistral/index
 import { moonshotChinaProviderPreset, moonshotGlobalProviderPreset } from "@ccr/core/providers/presets/moonshot/index";
 import { nvidiaProviderPreset } from "@ccr/core/providers/presets/nvidia/index";
 import { openaiProviderPreset } from "@ccr/core/providers/presets/openai/index";
+import { opencodeZenProviderPreset } from "@ccr/core/providers/presets/opencode-zen/index";
+import { opencodeGoProviderPreset } from "@ccr/core/providers/presets/opencode-go/index";
 import { openRouterProviderPreset } from "@ccr/core/providers/presets/openrouter/index";
 import { qiniuAiProviderPreset } from "@ccr/core/providers/presets/qiniu-ai/index";
 import { runApiProviderPreset } from "@ccr/core/providers/presets/runapi/index";
@@ -69,7 +71,9 @@ export const providerPresets: ProviderPreset[] = [
   teamoRouterProviderPreset,
   unity2ProviderPreset,
   code0ProviderPreset,
-  claudeApiProviderPreset
+  claudeApiProviderPreset,
+  opencodeZenProviderPreset,
+  opencodeGoProviderPreset
 ];
 
 export function getProviderPresets(): ProviderPreset[] {
